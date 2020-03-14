@@ -105,10 +105,37 @@
     var md = window.markdownit();
 
     questionEl = document.createElement('div');
+    questionEl.setAttribute('class', 'markdown-body');
     questionEl.innerHTML = md.render(rawQuestion.question);
+    axios({
+      method: 'post',
+      url: 'https://api.github.com/markdown',
+      data: {
+        "text": rawQuestion.question,
+        "mode": "gfm",
+        "context": "github/gollum"
+      },
+      responseType: 'text'
+    }).then((response)=>{
+      questionEl.innerHTML = response.data;
+    });
 
     answerEl = document.createElement('div');
+    answerEl.setAttribute('class', 'markdown-body');
+
     answerEl.innerHTML = md.render(rawQuestion.answer);
+    axios({
+      method: 'post',
+      url: 'https://api.github.com/markdown',
+      data: {
+        "text": rawQuestion.answer,
+        "mode": "gfm",
+        "context": "github/gollum"
+      },
+      responseType: 'text'
+    }).then((response)=>{
+      answerEl.innerHTML = response.data;
+    });
 
     return {question: questionEl, answer: answerEl};
   }
