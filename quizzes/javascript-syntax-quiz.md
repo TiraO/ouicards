@@ -27,10 +27,47 @@ Name the data type of this expression:
 ------------------------------------------------------
 Name the data type of this expression:
 ```javascript
+3 < x
+```
+>
+`Boolean` a.k.a. true/false
+
+------------------------------------------------------
+Name the data type of this expression:
+```javascript
 10.25
 ```
 >
 `Number` a.k.a. float
+
+------------------------------------------------------
+Name the data type of this expression:
+```javascript
+[23, 2349, x]
+```
+>
+`Array` a.k.a. list
+
+------------------------------------------------------
+Name the data type of this expression:
+```javascript
+[":-)"]
+```
+>
+`Array` a.k.a. list
+
+------------------------------------------------------
+Each of these is an example of what:
+`=`
+`<=`
+`.`
+
+>
+an operator
+
+`=`   assignment operator (`x = 22`)
+`<=`  less-than-or-equal comparator operator (`x < 23`)
+`.`   dot operator (`position.x`)
 
 ------------------------------------------------------
 Given the following code:
@@ -72,4 +109,23 @@ What expression would evaluate to `"Fred"`?
 `person.name`
 
 ------------------------------------------------------
+Is this an expression or a statement:
+```javascript
+if(x < 10){
+    x = x + 1;
+}
+```
+>
+statement
 
+------------------------------------------------------
+Given the following code:
+```javascript
+x = 12;
+if(x < 10){
+    x = x + 1;
+}
+```
+What is the value of `x`?
+>
+12
