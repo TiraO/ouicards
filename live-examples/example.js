@@ -80,12 +80,12 @@ function initializeHandlers() {
     $('.answer').children().hide();
   }
 
-  $('.question').on('click', function() {
-    $('.answer div').show();
-  });
-
-  $('.answer').on('click', function() {
-    $('.answer div').show();
+  $('.question-and-answer').on('click', function() {
+    if($('.answer div').is(':visible')){
+      $('.answer div').hide();
+    } else {
+      $('.answer div').show();
+    }
   });
 
   // Update footer info

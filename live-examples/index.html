@@ -8,30 +8,32 @@
     <script src="https://cdn.jsdelivr.net/npm/axios@0.19.2/dist/axios.js"></script>
     <script src="questions.js"></script>
     <script src="/ouicards.js"></script>
-    <link rel="stylesheet" href="example.css">
-    <link rel="stylesheet" href="fonts.css">
-    <script src="example.js"></script>
+    <link rel="stylesheet" href="./example.css">
+    <link rel="stylesheet" href="./fonts.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.css" integrity="sha256-cf0utJyD3jlnqw2/IdG9Ai3UyTLsW10Z8nXcCbHhfDI=" crossorigin="anonymous" />
+    <script src="example.js"></script>
   </head>
 
   <body>
     <div class="flashcard">
-      
+
       <div class="upload">
         <label class="upload-questions-label">Upload Questions</label>
         <textarea id="questions-input-area" placeholder="Copy/ paste your comma-separated questions here." cols="80" rows="10"></textarea>
         <label id="load-questions">Load questions</label>
       </div>
 
-      <div class="question">
-        <div>Click here to show instructions</div>
-      </div>
-      <div class="answer">
-        <div style="display:none;">
-          <p>Upload your comma-separated questions above. Each question goes on a separate line.</p>
-          <p>To reveal an answer click on the dark-blue question area (like you just did) or click this answer section.</p>
-          <p>Fun fact: This application uses the <a href="http://en.wikipedia.org/wiki/Leitner_system" target="_blank">Leitner System</a>. Enjoy!</p>
-        </div>
+      <div class="question-and-answer">
+          <div class="question">
+            <div>Click here to show instructions</div>
+          </div>
+          <div class="answer">
+            <div style="display:none;">
+              <p>Upload your comma-separated questions above. Each question goes on a separate line.</p>
+              <p>To reveal an answer click on the dark-blue question area (like you just did) or click this answer section.</p>
+              <p>Fun fact: This application uses the <a href="http://en.wikipedia.org/wiki/Leitner_system" target="_blank">Leitner System</a>. Enjoy!</p>
+            </div>
+          </div>
       </div>
 
       <div class="controls">

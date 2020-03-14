@@ -68,6 +68,10 @@
     return newQuestion;
   }
 
+  function skip(){
+    moveQuestion(ouicards.currentBucket, ouicards.currentBucket);
+  }
+
   function correct() {
     if (ouicards.currentBucket === ouicards.bucketA) {
       moveQuestion(ouicards.bucketA, ouicards.bucketB);
@@ -181,6 +185,7 @@
     next:               next,
     correct:            correct,
     wrong:              wrong,
+    skip:               skip,
     moveQuestion:       moveQuestion,
     getQuestion:        getQuestion,
     buildQuestionHTML:  buildQuestionHTML,
