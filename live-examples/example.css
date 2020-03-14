@@ -10,7 +10,7 @@ body {
 }
 
 .flashcard {
-  width: 380px;
+  max-width: 380px;
   margin: 0 auto;
   color: #fbfbfb;
 }
