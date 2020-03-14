@@ -21,6 +21,12 @@ __Note:__ This example was built in June 2013 and may be outdated by the time yo
 
 ## Using Ouicards
 
+### Start the app
+```
+yarn install
+yarn start
+```
+
 ### > As a jQuery plugin
 
 If you'd like to quickly get running with OuiCards, you can simply create a \<ul> with the right CSS Classes and OuiCards will take care of the rest.
