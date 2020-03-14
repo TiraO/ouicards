@@ -79,11 +79,11 @@ body {
 
 .correct {
   background-color: #7dce90;
-  float: left;
 }
 
 .wrong {
   background-color: #dc7a6b;
+  float: left;
 }
 
 /*
