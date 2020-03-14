@@ -77,11 +77,11 @@ function initializeHandlers() {
   }
 
   $('.question').on('click', function() {
-    $('.answer p').show();
+    $('.answer div').show();
   });
 
   $('.answer').on('click', function() {
-    $('.answer p').show();
+    $('.answer div').show();
   });
 
   // Update footer info

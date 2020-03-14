@@ -4,9 +4,9 @@
     resetBuckets();
   }
 
-  function loadFromBrowser(selector, delimiter) {
+  function loadFromBrowser(selector, qaDelimiter, cardDelimiter='\n') {
     var flashcards = [],
-        userInput  = $(selector).val().split('\n');
+        userInput  = $(selector).val().split(cardDelimiter);
 
     // Get rid of empty questions
     userInput = userInput.filter(function(card) {
@@ -19,7 +19,7 @@
     }
 
     userInput.forEach(function(card) {
-      var parsedCard = card.split(delimiter);
+      var parsedCard = card.split(qaDelimiter);
       flashcards.push({question: parsedCard[0], answer: parsedCard[1]});
     });
 
@@ -102,11 +102,13 @@
   function buildQuestionHTML(rawQuestion) {
     var questionEl, answerEl;
 
-    questionEl = document.createElement('p');
-    questionEl.innerHTML = rawQuestion.question;
+    var md = window.markdownit();
 
-    answerEl = document.createElement('p');
-    answerEl.innerHTML = rawQuestion.answer.replace(/\n/g, '<br>');
+    questionEl = document.createElement('div');
+    questionEl.innerHTML = md.render(rawQuestion.question);
+
+    answerEl = document.createElement('div');
+    answerEl.innerHTML = md.render(rawQuestion.answer);
 
     return {question: questionEl, answer: answerEl};
   }
