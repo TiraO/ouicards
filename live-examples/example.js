@@ -2,9 +2,13 @@ var start; // used to initialize the app
 
 $(document).ready(function() {
   // Load default questions if no flashcards are found in localStorage
-  if (!localStorage.flashcards || localStorage.flashcards === '[]')
-    ouicards.loadFromArray(myFlashcards);
-  initializeHandlers();
+  axios({
+    method: 'get',
+    url: '/api/quizzes/123'
+  }).then((response)=>{
+    ouicards.loadFromArray(response.data);
+    initializeHandlers();
+  });
 });
 
 function initializeHandlers() {

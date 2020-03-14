@@ -1,0 +1,22 @@
+{
+  "name": "ouicards",
+  "version": "1.0.0",
+  "description": "Ouicards allows you to easily build flashcards to study for... everything!",
+  "main": "ouicards.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/raphaelpierquin/ouicards.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/raphaelpierquin/ouicards/issues"
+  },
+  "homepage": "https://github.com/raphaelpierquin/ouicards#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
