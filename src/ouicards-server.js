@@ -21,15 +21,14 @@ function parseQuizFromMarkdown( markdown ) {
 
 app.get('/api/quizzes/:quizId', function ( request, response ) {
   response.setHeader('Content-Type', 'application/json');
-  console.log('requested quiz', request.quizId);
-  var content = fs.readFileSync(rel("/live-examples/javascript_syntax_quiz.md"), 'utf8');
+  console.log('requested quiz', request.params.quizId);
+  var content = fs.readFileSync(rel("../quizzes/" + request.params.quizId + ".md"), 'utf8');
   var quiz = parseQuizFromMarkdown(content);
   response.send(quiz);
 });
 
 
-app.use('/live', express.static(rel('live-examples')));
-app.use('/ouicards.js', express.static(rel('ouicards.js')));
+app.use(express.static(rel('./public')));
 app.listen(process.env.PORT || 3000, function () {
   console.log('App listening on port 3000!');
 });

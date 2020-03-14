@@ -4,7 +4,7 @@ $(document).ready(function() {
   // Load default questions if no flashcards are found in localStorage
   axios({
     method: 'get',
-    url: '/api/quizzes/123'
+    url: '/api/quizzes/javascript-syntax-quiz'
   }).then((response)=>{
     ouicards.loadFromArray(response.data);
     initializeHandlers();
@@ -83,8 +83,10 @@ function initializeHandlers() {
   $('.question-and-answer').on('click', function() {
     if($('.answer div').is(':visible')){
       $('.answer div').hide();
+      $('.answer').removeClass('visible');
     } else {
       $('.answer div').show();
+      $('.answer').addClass('visible');
     }
   });
 
