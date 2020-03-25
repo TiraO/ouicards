@@ -65,8 +65,12 @@ Each of these is an example of what:
 >
 an operator
 
+**explanation:**
+
 `=`   assignment operator (`x = 22`)
+
 `<=`  less-than-or-equal comparator operator (`x < 23`)
+
 `.`   dot operator (`position.x`)
 
 ------------------------------------------------------
