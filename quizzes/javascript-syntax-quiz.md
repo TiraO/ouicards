@@ -160,8 +160,10 @@ let onBirthday = (person) =>{
 >
 2
 
-- the passed-in object's attribute is changed
-- text is printed to the console.
+** explanation: **
+
+1. the passed-in object's attribute is changed
+2.  text is printed to the console.
 
 ------------------------------------------------------
 What is the value of `monster` after this statement runs?
