@@ -1,239 +1,247 @@
-;(function(exports) {
-  function loadFromArray(array) {
-    ouicards.flashcards = _.shuffle(array);
-    resetBuckets();
-  }
-
-  function loadFromBrowser(selector, qaDelimiter, cardDelimiter='\n') {
-    var flashcards = [],
-        userInput  = $(selector).val().split(cardDelimiter);
-
-    // Get rid of empty questions
-    userInput = userInput.filter(function(card) {
-       return card !== "";
-     });
-
-    if (userInput.length === 0) {
-      console.log('There are no flashcards to upload.');
-      return;
+;(function (exports) {
+    function loadFromArray(array) {
+        ouicards.flashcards = _.shuffle(array);
+        resetBuckets();
     }
 
-    userInput.forEach(function(card) {
-      var parsedCard = card.split(qaDelimiter);
-      flashcards.push({question: parsedCard[0], answer: parsedCard[1]});
-    });
+    function loadFromBrowser(selector, qaDelimiter, cardDelimiter = '\n') {
+        var flashcards = [],
+            userInput = $(selector).val().split(cardDelimiter);
 
-    ouicards.flashcards = flashcards;
-    resetBuckets();
-    return getFromLS();
-  }
+        // Get rid of empty questions
+        userInput = userInput.filter(function (card) {
+            return card !== "";
+        });
 
-  function next() {
-    var newQuestion,
-        bigInterval   = Math.ceil(ouicards.flashcards.length / 3) + 1,
-        smallInterval = Math.ceil(ouicards.flashcards.length / 6) + 1;
+        if (userInput.length === 0) {
+            console.log('There are no flashcards to upload.');
+            return;
+        }
 
-    // Show an answer from bucket C once every bigInterval 
-    // So long as Bucket C it's not empty
-    if (ouicards.counter % bigInterval === 0 && ouicards.bucketC.length !== 0) {
-      newQuestion = getQuestion(ouicards.bucketC);
-      ouicards.currentBucket = ouicards.bucketC;
+        userInput.forEach(function (card) {
+            var parsedCard = card.split(qaDelimiter);
+            flashcards.push({question: parsedCard[0], answer: parsedCard[1]});
+        });
 
-    // Show an answer from bucket B once every smallInterval
-    // So long as Bucket B it's not empty
-    } else if (ouicards.counter % smallInterval === 0 && ouicards.bucketB.length !== 0) {
-      newQuestion = getQuestion(ouicards.bucketB);
-      ouicards.currentBucket = ouicards.bucketB;
-
-    // Show an answer from Bucket A, so long as it's not empty
-    } else if (ouicards.bucketA.length !== 0) {
-      newQuestion = getQuestion(ouicards.bucketA);
-      ouicards.currentBucket = ouicards.bucketA;
-
-    // Show an answer from Bucket B, so long as it's not empty
-    } else if (ouicards.bucketB.length !== 0) {
-      newQuestion = getQuestion(ouicards.bucketB);
-      ouicards.currentBucket = ouicards.bucketB;
-
-    // Show a question from Bucket C, so long as it's not empty
-    } else if (ouicards.bucketC.length !== 0) {
-      newQuestion = getQuestion(ouicards.bucketC);
-      ouicards.currentBucket = ouicards.bucketC;
-    } else {
-      console.log('There was a serious problem with ouicards. You should never see ');
+        ouicards.flashcards = flashcards;
+        resetBuckets();
+        return getFromLS();
     }
 
-    // Reset ouicards.counter if it's greater than flashcard count, otherwise ++ it
-    ouicards.counter >= ouicards.flashcards.length ? ouicards.counter = 1 : ouicards.counter++;
-    return newQuestion;
-  }
+    function next() {
+        var newQuestion,
+            bigInterval = Math.ceil(ouicards.flashcards.length / 3) + 1,
+            smallInterval = Math.ceil(ouicards.flashcards.length / 6) + 1;
 
-  function skip(){
-    moveQuestion(ouicards.currentBucket, ouicards.currentBucket);
-  }
+        // Show an answer from bucket C once every bigInterval
+        // So long as Bucket C it's not empty
+        if (ouicards.counter % bigInterval === 0 && ouicards.bucketC.length !== 0) {
+            newQuestion = getQuestion(ouicards.bucketC);
+            ouicards.currentBucket = ouicards.bucketC;
 
-  function correct() {
-    if (ouicards.currentBucket === ouicards.bucketA) {
-      moveQuestion(ouicards.bucketA, ouicards.bucketB);
-    } else if (ouicards.currentBucket === ouicards.bucketB) {
-      moveQuestion(ouicards.bucketB, ouicards.bucketC);
-    } else if (ouicards.currentBucket === ouicards.bucketC) {
-      moveQuestion(ouicards.bucketC, ouicards.bucketC);
-    } else
-      console.log('Hmm, you should not be here.');
-    saveToLS();
-  }
+            // Show an answer from bucket B once every smallInterval
+            // So long as Bucket B it's not empty
+        } else if (ouicards.counter % smallInterval === 0 && ouicards.bucketB.length !== 0) {
+            newQuestion = getQuestion(ouicards.bucketB);
+            ouicards.currentBucket = ouicards.bucketB;
 
-  function wrong() {
-    moveQuestion(ouicards.currentBucket, ouicards.bucketA);
-    saveToLS();
-  }
+            // Show an answer from Bucket A, so long as it's not empty
+        } else if (ouicards.bucketA.length !== 0) {
+            newQuestion = getQuestion(ouicards.bucketA);
+            ouicards.currentBucket = ouicards.bucketA;
 
-  function moveQuestion(fromBucket, toBucket) {
-    toBucket.push(fromBucket.shift());
-  }
+            // Show an answer from Bucket B, so long as it's not empty
+        } else if (ouicards.bucketB.length !== 0) {
+            newQuestion = getQuestion(ouicards.bucketB);
+            ouicards.currentBucket = ouicards.bucketB;
 
-  function getQuestion(bucket) {
-    // Prevent from looping thru an empty bucket
-    if (!bucket || bucket.length === 0) {
-      console.log("You can't load an empty set of questions.");
-      return;
+            // Show a question from Bucket C, so long as it's not empty
+        } else if (ouicards.bucketC.length !== 0) {
+            newQuestion = getQuestion(ouicards.bucketC);
+            ouicards.currentBucket = ouicards.bucketC;
+        } else {
+            console.log('There was a serious problem with ouicards. You should never see ');
+        }
+
+        // Reset ouicards.counter if it's greater than flashcard count, otherwise ++ it
+        ouicards.counter >= ouicards.flashcards.length ? ouicards.counter = 1 : ouicards.counter++;
+        return newQuestion;
     }
 
-    return buildQuestionHTML(bucket[0]);
-  }
+    function skip() {
+        moveQuestion(ouicards.currentBucket, ouicards.currentBucket);
+    }
 
-  function buildQuestionHTML(rawQuestion) {
-    var questionEl, answerEl;
+    function correct() {
+        if (ouicards.currentBucket === ouicards.bucketA) {
+            moveQuestion(ouicards.bucketA, ouicards.bucketB);
+        } else if (ouicards.currentBucket === ouicards.bucketB) {
+            moveQuestion(ouicards.bucketB, ouicards.bucketC);
+        } else if (ouicards.currentBucket === ouicards.bucketC) {
+            moveQuestion(ouicards.bucketC, ouicards.bucketC);
+        } else
+            console.log('Hmm, you should not be here.');
+        saveToLS();
+    }
 
-    var md = window.markdownit();
+    function wrong() {
+        moveQuestion(ouicards.currentBucket, ouicards.bucketA);
+        saveToLS();
+    }
 
-    questionEl = document.createElement('div');
-    questionEl.setAttribute('class', 'markdown-body');
-    questionEl.innerHTML = md.render(rawQuestion.question);
+    function moveQuestion(fromBucket, toBucket) {
+        toBucket.push(fromBucket.shift());
+    }
+
+    function getQuestion(bucket) {
+        // Prevent from looping thru an empty bucket
+        if (!bucket || bucket.length === 0) {
+            console.log("You can't load an empty set of questions.");
+            return;
+        }
+
+        return buildQuestionHTML(bucket[0]);
+    }
+
     var questionCache = {};
-    if (questionCache[rawQuestion.question] == undefined) {
-      axios({
-        method: 'post',
-        url: 'https://api.github.com/markdown',
-        data: {
-          "text": rawQuestion.question,
-          "mode": "gfm",
-          "context": "github/gollum"
-        },
-        responseType: 'text'
-      }).then((response)=>{
-        questionCache[rawQuestion.question] = response.data;
-        questionEl.innerHTML =  questionCache[rawQuestion.question];
-      });
+
+    function buildQuestionHTML(rawQuestion) {
+        var questionEl, answerEl;
+
+        var md = window.markdownit();
+
+        questionEl = document.createElement('div');
+        questionEl.setAttribute('class', 'markdown-body');
+        questionEl.innerHTML = md.render(rawQuestion.question);
+        if (questionCache[rawQuestion.question] == undefined) {
+            axios({
+                method: 'post',
+                url: 'https://api.github.com/markdown',
+                data: {
+                    "text": rawQuestion.question,
+                    "mode": "gfm",
+                    "context": "github/gollum"
+                },
+                responseType: 'text'
+            }).then((response) => {
+                questionCache[rawQuestion.question] = response.data;
+                questionEl.innerHTML = questionCache[rawQuestion.question];
+            });
+        } else {
+            questionEl.innerHTML = questionCache[rawQuestion.question];
+        }
+
+        answerEl = document.createElement('div');
+        answerEl.setAttribute('class', 'markdown-body');
+
+        answerEl.innerHTML = md.render(rawQuestion.answer);
+        axios({
+            method: 'post',
+            url: 'https://api.github.com/markdown',
+            data: {
+                "text": rawQuestion.answer,
+                "mode": "gfm",
+                "context": "github/gollum"
+            },
+            responseType: 'text'
+        }).then((response) => {
+            answerEl.innerHTML = response.data;
+        });
+
+        return {question: questionEl, answer: answerEl};
     }
-    
-    answerEl = document.createElement('div');
-    answerEl.setAttribute('class', 'markdown-body');
 
-    answerEl.innerHTML = md.render(rawQuestion.answer);
-    axios({
-      method: 'post',
-      url: 'https://api.github.com/markdown',
-      data: {
-        "text": rawQuestion.answer,
-        "mode": "gfm",
-        "context": "github/gollum"
-      },
-      responseType: 'text'
-    }).then((response)=>{
-      answerEl.innerHTML = response.data;
-    });
+    function saveToLS() {
+        localStorage.flashcards = JSON.stringify(ouicards.flashcards);
+        localStorage.bucketA = JSON.stringify(ouicards.bucketA);
+        localStorage.bucketB = JSON.stringify(ouicards.bucketB);
+        localStorage.bucketC = JSON.stringify(ouicards.bucketC);
+    }
 
-    return {question: questionEl, answer: answerEl};
-  }
+    function getFromLS() {
+        ouicards.flashcards = JSON.parse(localStorage.flashcards || '[]');
+        ouicards.bucketA = JSON.parse(localStorage.bucketA || '[]');
+        ouicards.bucketB = JSON.parse(localStorage.bucketB || '[]');
+        ouicards.bucketC = JSON.parse(localStorage.bucketC || '[]');
+        ouicards.currentBucket = ouicards.bucketA.length ? ouicards.bucketA :
+            ouicards.bucketB.length ? ouicards.bucketB :
+                ouicards.bucketC.length ? ouicards.bucketC : [];
 
-  function saveToLS() {
-    localStorage.flashcards = JSON.stringify(ouicards.flashcards);
-    localStorage.bucketA    = JSON.stringify(ouicards.bucketA);
-    localStorage.bucketB    = JSON.stringify(ouicards.bucketB);
-    localStorage.bucketC    = JSON.stringify(ouicards.bucketC);
-  }
+        ouicards.counter = 1;
+        return {
+            flashcards: ouicards.flashcards,
+            bucketA: ouicards.bucketA,
+            bucketB: ouicards.bucketB,
+            bucketC: ouicards.bucketC
+        };
+    }
 
-  function getFromLS() {
-    ouicards.flashcards    = JSON.parse(localStorage.flashcards || '[]');
-    ouicards.bucketA       = JSON.parse(localStorage.bucketA    || '[]');
-    ouicards.bucketB       = JSON.parse(localStorage.bucketB    || '[]');
-    ouicards.bucketC       = JSON.parse(localStorage.bucketC    || '[]');
-    ouicards.currentBucket = ouicards.bucketA.length ? ouicards.bucketA :
-                         ouicards.bucketB.length ? ouicards.bucketB :
-                         ouicards.bucketC.length ? ouicards.bucketC : [];
+    function resetBuckets() {
+        ouicards.bucketA = ouicards.flashcards.slice(0);
+        ouicards.currentBucket = ouicards.bucketA;
+        ouicards.bucketB = [];
+        ouicards.bucketC = [];
+        ouicards.counter = 1;
+        saveToLS();
+    }
 
-    ouicards.counter = 1;
-    return {flashcards: ouicards.flashcards, bucketA: ouicards.bucketA, bucketB: ouicards.bucketB, bucketC: ouicards.bucketC};
-  }
-
-  function resetBuckets() {
-    ouicards.bucketA       = ouicards.flashcards.slice(0);
-    ouicards.currentBucket = ouicards.bucketA;
-    ouicards.bucketB       = [];
-    ouicards.bucketC       = [];
-    ouicards.counter       = 1;
-    saveToLS();
-  }
-
-  exports.ouicards = {
-    currentBucket:      [],
-    flashcards:         [],
-    bucketA:            [],
-    bucketB:            [],
-    bucketC:            [],
-    counter:            1,
-    loadFromArray:      loadFromArray,
-    loadFromBrowser:    loadFromBrowser,
-    next:               next,
-    correct:            correct,
-    wrong:              wrong,
-    skip:               skip,
-    moveQuestion:       moveQuestion,
-    getQuestion:        getQuestion,
-    buildQuestionHTML:  buildQuestionHTML,
-    saveToLS:           saveToLS,
-    getFromLS:          getFromLS,
-    resetBuckets:       resetBuckets
-  };
+    exports.ouicards = {
+        currentBucket: [],
+        flashcards: [],
+        bucketA: [],
+        bucketB: [],
+        bucketC: [],
+        counter: 1,
+        loadFromArray: loadFromArray,
+        loadFromBrowser: loadFromBrowser,
+        next: next,
+        correct: correct,
+        wrong: wrong,
+        skip: skip,
+        moveQuestion: moveQuestion,
+        getQuestion: getQuestion,
+        buildQuestionHTML: buildQuestionHTML,
+        saveToLS: saveToLS,
+        getFromLS: getFromLS,
+        resetBuckets: resetBuckets
+    };
 
 // jQuery magic
-  var showNext = function() {
-    var result = next();
-    $('#current-question').first().html(result['question']);
-    $('#current-answer').first().hide().html(result['answer']);
-  };
+    var showNext = function () {
+        var result = next();
+        $('#current-question').first().html(result['question']);
+        $('#current-answer').first().hide().html(result['answer']);
+    };
 
-  $.fn.ouicards = function() {
-    var result = [];
-    this.find('ul').hide().children().each(function() {
-      result.push({
-        question: $(this).find('.question').text(),
-        answer: $(this).find('.answer').text()
-      });
-    });
-    
-    loadFromArray(result);
+    $.fn.ouicards = function () {
+        var result = [];
+        this.find('ul').hide().children().each(function () {
+            result.push({
+                question: $(this).find('.question').text(),
+                answer: $(this).find('.answer').text()
+            });
+        });
 
-    $('a#correct').click(function(event) {
-      event.preventDefault();
-      correct();
-      showNext();
-    });
+        loadFromArray(result);
 
-    $('a#wrong').click(function(event) {
-      event.preventDefault();
-      wrong();
-      showNext();
-    });
+        $('a#correct').click(function (event) {
+            event.preventDefault();
+            correct();
+            showNext();
+        });
 
-    $('a#show-answer').click(function(event){
-      event.preventDefault();
-      $('#current-answer').first().show();
-    });
+        $('a#wrong').click(function (event) {
+            event.preventDefault();
+            wrong();
+            showNext();
+        });
 
-    showNext();
-  };
+        $('a#show-answer').click(function (event) {
+            event.preventDefault();
+            $('#current-answer').first().show();
+        });
+
+        showNext();
+    };
 
 })(this);
